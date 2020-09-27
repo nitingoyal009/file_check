@@ -1,0 +1,12 @@
+---
+- name: add file
+  hosts: all
+  vars_files:
+          - create_file.yml
+  tasks:
+          - name: add file
+            copy:
+                    content: "{{ item.content }}"
+                    dest: "{{ item.name }}"
+            with_items: 
+             - "{{ files }}"
