@@ -1,0 +1,25 @@
+---
+- name: Match checksum
+  hosts: all
+  gather_facts: false
+  vars_files:
+          - files_list.yml
+  tasks:
+          - name: Checking checksum
+            stat:
+                    path: "{{ item.name }}"
+            with_items: "{{ files }}"
+            register: test
+
+          - name: checksum matched
+            debug:
+                    msg: "checksum matched successfully"
+            when: '"{{ item.item.checksum }}" == "{{ item.stat.checksum}}"'
+            with_items: "{{ test.results }}"
+
+          - name: checksum not matched
+            debug: 
+                    msg: "checksum not matched"
+            when: '"{{ item.item.checksum }}" != "{{ item.stat.checksum }}"'
+            with_items: "{{ test.results }}"
+
