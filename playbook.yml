@@ -1,25 +1,25 @@
 ---
-- name: Match checksum
+- name: Create users
   hosts: all
-  gather_facts: false
   vars_files:
           - files_list.yml
   tasks:
-          - name: Checking checksum
+          - name: rgister checksum
             stat:
                     path: "{{ item.name }}"
-            with_items: "{{ files }}"
             register: test
-
+            with_items: "{{ files }}"
+            
           - name: checksum matched
             debug:
-                    msg: "checksum matched successfully"
-            when: '"{{ item.item.checksum }}" == "{{ item.stat.checksum}}"'
+                    msg: "checksum matched"
+            when: '"{{ item.item.checksum }}" == "{{ item.stat.checksum }}"'
             with_items: "{{ test.results }}"
 
           - name: checksum not matched
-            debug: 
+            debug:
                     msg: "checksum not matched"
             when: '"{{ item.item.checksum }}" != "{{ item.stat.checksum }}"'
             with_items: "{{ test.results }}"
+...
 
